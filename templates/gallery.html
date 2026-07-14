@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates - Thoufi Resume Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 30px 20px;
+            z-index: 100;
+            overflow-y: auto;
+            backdrop-filter: blur(20px);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            padding-left: 10px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+            color: #fff;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            color: #3b82f6;
+        }
+
+        .nav-item:hover i, .nav-item.active i {
+            color: #60a5fa;
+        }
+
+        .sidebar-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: #60a5fa;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #94a3b8;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 40px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #fff 0%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .template-card {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(15, 23, 42, 0.3) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .template-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 25px 50px rgba(37, 99, 235, 0.15);
+        }
+
+        .template-preview {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .template-preview-bg {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: rgba(255,255,255,0.1);
+        }
+
+        .template-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .template-card:hover .template-overlay {
+            opacity: 1;
+        }
+
+        .use-template-btn {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .use-template-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4);
+        }
+
+        .template-info {
+            padding: 28px;
+        }
+
+        .template-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .template-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .template-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .template-tag {
+            padding: 5px 14px;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            font-weight: 500;
+        }
+
+        .template-tag.popular {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .template-tag.ats {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border: none;
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 80px 20px 20px;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">THOUFI</div>
+
+        <nav>
+            <a href="/dashboard" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/builder" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Build Resume</span>
+            </a>
+            <a href="/gallery" class="nav-item active">
+                <i class="fas fa-th-large"></i>
+                <span>Templates</span>
+            </a>
+            <a href="/builder?tab=analyze" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>ATS Analyzer</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="nav-item">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">T</div>
+                <div class="user-details">
+                    <div class="user-name">Thoufi</div>
+                    <div class="user-role">Pro Member</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header animate-in">
+            <h1>Resume Templates</h1>
+            <p>Choose from our collection of professional, ATS-optimized templates</p>
+        </div>
+
+        <div class="templates-grid" id="templatesGrid">
+            <!-- Templates will be loaded dynamically -->
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function logout() {
+            window.location.href = '/logout';
+        }
+
+        const templates = [
+            {
+                id: 'modern',
+                name: 'Modern Professional',
+                description: 'Clean, modern design with subtle colors. Perfect for tech and corporate roles.',
+                color: '#2563eb',
+                icon: 'fa-file-alt',
+                tags: ['Popular', 'ATS Optimized', 'Tech']
+            },
+            {
+                id: 'classic',
+                name: 'Classic Elegant',
+                description: 'Traditional layout with elegant typography. Ideal for conservative industries.',
+                color: '#1e40af',
+                icon: 'fa-file-alt',
+                tags: ['Professional', 'ATS Optimized']
+            },
+            {
+                id: 'creative',
+                name: 'Creative Bold',
+                description: 'Bold design for creative professionals. Stand out from the crowd.',
+                color: '#3b82f6',
+                icon: 'fa-palette',
+                tags: ['Creative', 'Design']
+            },
+            {
+                id: 'minimal',
+                name: 'Minimal Clean',
+                description: 'Ultra-minimal design focusing purely on content. Maximum readability.',
+                color: '#60a5fa',
+                icon: 'fa-minus',
+                tags: ['Minimal', 'ATS Optimized']
+            },
+            {
+                id: 'tech',
+                name: 'Tech Professional',
+                description: 'Optimized for tech industry roles. Highlights technical skills prominently.',
+                color: '#1d4ed8',
+                icon: 'fa-code',
+                tags: ['Tech', 'ATS Optimized', 'Popular']
+            },
+            {
+                id: 'executive',
+                name: 'Executive Suite',
+                description: 'Premium design for senior positions. Conveys leadership and authority.',
+                color: '#1e3a8a',
+                icon: 'fa-crown',
+                tags: ['Executive', 'Senior']
+            }
+        ];
+
+        function renderTemplates() {
+            const grid = document.getElementById('templatesGrid');
+
+            templates.forEach((template, index) => {
+                const card = document.createElement('div');
+                card.className = 'template-card animate-in';
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                const tagsHtml = template.tags.map(tag => {
+                    let className = 'template-tag';
+                    if (tag === 'Popular') className += ' popular';
+                    if (tag === 'ATS Optimized') className += ' ats';
+                    return `<span class="${className}">${tag}</span>`;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="template-preview" style="background: linear-gradient(135deg, ${template.color}22, ${template.color}44);">
+                        <div class="template-preview-bg">
+                            <i class="fas ${template.icon}"></i>
+                        </div>
+                        <div class="template-overlay">
+                            <button class="use-template-btn" onclick="useTemplate('${template.id}')">
+                                <i class="fas fa-magic"></i> Use Template
+                            </button>
+                        </div>
+                    </div>
+                    <div class="template-info">
+                        <div class="template-name">${template.name}</div>
+                        <div class="template-desc">${template.description}</div>
+                        <div class="template-tags">${tagsHtml}</div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function useTemplate(templateId) {
+            window.location.href = `/builder?template=${templateId}`;
+        }
+
+        renderTemplates();
+    </script>
+</body>
+</html>

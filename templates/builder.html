@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Resume - Thoufi Resume Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/builder.css">
+</head>
+
+<body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">THOUFI</div>
+        <nav>
+            <a href="/dashboard" class="nav-item">
+                <i class="fas fa-home"></i><span>Dashboard</span>
+            </a>
+            <button class="nav-item active" onclick="showTab('builder')">
+                <i class="fas fa-file-alt"></i><span>Build Resume</span>
+            </button>
+            <a href="/gallery" class="nav-item">
+                <i class="fas fa-th-large"></i><span>Templates</span>
+            </a>
+            <button class="nav-item" onclick="showTab('analyze')">
+                <i class="fas fa-chart-line"></i><span>ATS Analyzer</span>
+            </button>
+            <a href="https://linkedin.com" target="_blank" class="nav-item">
+                <i class="fab fa-linkedin"></i><span>LinkedIn</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">T</div>
+                <div class="user-details">
+                    <div class="user-name">Thoufi</div>
+                    <div class="user-role">Pro Member</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1>Resume Builder</h1>
+                <p>Create your professional ATS-optimized resume with AI</p>
+            </div>
+            <div class="page-actions">
+                <button class="btn btn-outline" onclick="showTab('analyze')">
+                    <i class="fas fa-chart-line"></i> Analyze
+                </button>
+                <button class="btn btn-success" onclick="downloadResume()">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Builder Tab -->
+        <div id="builderTab" class="builder-container">
+            <div class="form-section animate-in">
+                <div class="section-header">
+                    <span class="section-number">1</span>
+                    <h2>Personal Information</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" id="firstName" placeholder="John"
+                            oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" id="lastName" placeholder="Doe" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="email" placeholder="john@example.com"
+                            oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-input" id="phone" placeholder="+1 234 567 890"
+                            oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Professional Title</label>
+                    <input type="text" class="form-input" id="title" placeholder="Software Engineer"
+                        oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="location" placeholder="New York, NY"
+                        oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Professional Summary</label>
+                    <textarea class="form-textarea" id="summary"
+                        placeholder="Brief overview of your professional background..."
+                        oninput="updatePreview()"></textarea>
+                </div>
+
+                <div class="section-header" style="margin-top: 30px;">
+                    <span class="section-number">2</span>
+                    <h2>Work Experience</h2>
+                </div>
+                <div id="experienceContainer"></div>
+                <button class="add-btn" onclick="addExperience()">
+                    <i class="fas fa-plus"></i> Add Experience
+                </button>
+
+                <div class="section-header" style="margin-top: 30px;">
+                    <span class="section-number">3</span>
+                    <h2>Education</h2>
+                </div>
+                <div id="educationContainer"></div>
+                <button class="add-btn" onclick="addEducation()">
+                    <i class="fas fa-plus"></i> Add Education
+                </button>
+
+                <div class="section-header" style="margin-top: 30px;">
+                    <span class="section-number">4</span>
+                    <h2>Skills</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Skills (comma separated)</label>
+                    <textarea class="form-textarea" id="skills" placeholder="Python, JavaScript, React, Node.js, SQL..."
+                        oninput="updatePreview()"></textarea>
+                </div>
+
+                <div class="section-header" style="margin-top: 30px;">
+                    <span class="section-number">5</span>
+                    <h2>Target Job Role</h2>
+                </div>
+                <div class="form-group job-role-selector">
+                    <label class="form-label">Select Target Role for ATS Optimization</label>
+                    <select class="form-select" id="jobRole">
+                        <option value="Software Engineer">Software Engineer</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Web Developer">Web Developer</option>
+                        <option value="DevOps Engineer">DevOps Engineer</option>
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="UI/UX Designer">UI/UX Designer</option>
+                        <option value="Marketing Manager">Marketing Manager</option>
+                        <option value="Financial Analyst">Financial Analyst</option>
+                        <option value="AI Engineer">AI Engineer</option>
+                        <option value="Cloud Architect">Cloud Architect</option>
+                    </select>
+                </div>
+
+                <!-- PDF Upload for ATS Analysis -->
+                <div class="section-header" style="margin-top: 30px;">
+                    <span class="section-number" style="background: linear-gradient(135deg, #059669, #10b981);"><i
+                            class="fas fa-file-upload"></i></span>
+                    <h2>Upload Resume for ATS Analysis</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload your existing resume (PDF)</label>
+                    <div class="file-upload-area" id="fileUploadArea"
+                        onclick="document.getElementById('pdfUpload').click()">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 2rem; color: #3b82f6; margin-bottom: 10px;"></i>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Click to upload PDF or drag & drop</p>
+                        <p style="color: #475569; font-size: 0.8rem; margin-top: 5px;">Supported: PDF files only</p>
+                    </div>
+                    <input type="file" id="pdfUpload" accept=".pdf" style="display: none;"
+                        onchange="handlePDFUpload(event)">
+                    <div id="uploadedFileName"
+                        style="margin-top: 10px; color: #22c55e; font-size: 0.85rem; display: none;">
+                        <i class="fas fa-check-circle"></i> <span id="fileNameText"></span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 16px; font-size: 1rem;"
+                    onclick="generateAIResume()">
+                    <i class="fas fa-magic"></i> AI Optimize & Generate Resume
+                </button>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-header">
+                    <h3><i class="fas fa-eye"></i> Live Preview</h3>
+                    <div class="preview-actions">
+                        <button class="btn btn-outline" onclick="changeTemplate()">
+                            <i class="fas fa-palette"></i> Template
+                        </button>
+                    </div>
+                </div>
+                <div class="resume-preview" id="resumePreview">
+                    <h1 id="previewName">Your Name</h1>
+                    <div class="contact-info" id="previewContact">email@example.com | +1 234 567 890 | Location</div>
+                    <div class="section-title">Professional Summary</div>
+                    <p id="previewSummary" style="font-size: 0.9rem; color: #334155; line-height: 1.6;">Your
+                        professional summary will appear here...</p>
+                    <div class="section-title">Experience</div>
+                    <div id="previewExperience"></div>
+                    <div class="section-title">Education</div>
+                    <div id="previewEducation"></div>
+                    <div class="section-title">Skills</div>
+                    <div class="skills-list" id="previewSkills"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATS Analysis Tab -->
+        <div id="analyzeTab" class="ats-panel">
+            <div class="section-header">
+                <span class="section-number" style="background: linear-gradient(135deg, #059669, #10b981);"><i
+                        class="fas fa-chart-line"></i></span>
+                <h2>ATS Resume Analysis</h2>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Select Job Role</label>
+                <select class="form-select" id="analyzeJobRole">
+                    <option value="Software Engineer">Software Engineer</option>
+                    <option value="Data Scientist">Data Scientist</option>
+                    <option value="Web Developer">Web Developer</option>
+                    <option value="DevOps Engineer">DevOps Engineer</option>
+                    <option value="Product Manager">Product Manager</option>
+                    <option value="UI/UX Designer">UI/UX Designer</option>
+                    <option value="Marketing Manager">Marketing Manager</option>
+                    <option value="Financial Analyst">Financial Analyst</option>
+                    <option value="AI Engineer">AI Engineer</option>
+                    <option value="Cloud Architect">Cloud Architect</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 35px; padding: 16px; font-size: 1rem;"
+                onclick="analyzeResume()">
+                <i class="fas fa-search"></i> Analyze My Resume with AI
+            </button>
+            <div id="analysisResults" style="display: none;">
+                <div class="ats-score-circle">
+                    <svg width="180" height="180">
+                        <circle cx="90" cy="90" r="75" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" />
+                        <circle id="scoreCircle" cx="90" cy="90" r="75" fill="none" stroke="#3b82f6" stroke-width="12"
+                            stroke-dasharray="471" stroke-dashoffset="471" stroke-linecap="round" />
+                    </svg>
+                    <div class="ats-score-value" id="scoreValue">0%</div>
+                </div>
+                <div class="ats-score-label">ATS Match Score</div>
+                <div class="keyword-section">
+                    <h4><i class="fas fa-check-circle"></i> Matched Keywords</h4>
+                    <div class="keyword-tags" id="matchedKeywords"></div>
+                </div>
+                <div class="keyword-section">
+                    <h4 class="missing"><i class="fas fa-times-circle"></i> Missing Keywords</h4>
+                    <div class="keyword-tags" id="missingKeywords"></div>
+                </div>
+                <div class="suggestions-box">
+                    <h4><i class="fas fa-lightbulb"></i> AI Suggestions</h4>
+                    <ul id="suggestionsList"></ul>
+                </div>
+                <div style="margin-top: 25px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.1);">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #3b82f6; font-weight: 700;"><i
+                            class="fas fa-briefcase"></i> Job Description</h4>
+                    <p id="jobDescription" style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6;"></p>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 25px;">
+                    <a href="https://linkedin.com" target="_blank" class="btn linkedin-btn"
+                        style="flex: 1; justify-content: center; padding: 14px;">
+                        <i class="fab fa-linkedin"></i> Apply on LinkedIn
+                    </a>
+                    <button class="btn btn-primary" style="flex: 1; justify-content: center; padding: 14px;"
+                        onclick="showTab('builder')">
+                        <i class="fas fa-edit"></i> Improve Resume
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Chat Widget -->
+        <div class="ai-chat-widget">
+            <button class="ai-chat-btn" onclick="toggleChat()">
+                <i class="fas fa-robot"></i>
+            </button>
+        </div>
+        <div class="ai-chat-panel" id="aiChatPanel">
+            <div class="ai-chat-header">
+                <div class="ai-chat-avatar">
+                    <i class="fas fa-robot" style="color: #2563eb;"></i>
+                </div>
+                <div class="ai-chat-title">
+                    <h4>Thoufi AI Assistant</h4>
+                    <p>Powered by OpenAI GPT-4</p>
+                </div>
+                <button class="ai-chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-chat-messages" id="chatMessages">
+                <div class="chat-message ai">
+                    <div class="ai-label"><i class="fas fa-robot"></i> Thoufi AI</div>
+                    Hello! I am your AI Resume Assistant. I can help you create the perfect resume, optimize it for ATS,
+                    and answer any career questions. What would you like to do today?
+                </div>
+            </div>
+            <div class="ai-suggestion-chips">
+                <button class="ai-chip" onclick="sendQuickMessage('How do I optimize my resume for ATS?')">ATS
+                    Tips</button>
+                <button class="ai-chip"
+                    onclick="sendQuickMessage('What skills should I add for a Software Engineer role?')">Skills
+                    Help</button>
+                <button class="ai-chip" onclick="sendQuickMessage('How should I format my work experience?')">Experience
+                    Format</button>
+                <button class="ai-chip" onclick="sendQuickMessage('What makes a good professional summary?')">Summary
+                    Tips</button>
+            </div>
+            <div class="ai-chat-input-area">
+                <input type="text" class="ai-chat-input" id="chatInput" placeholder="Ask me anything about resumes..."
+                    onkeypress="if(event.key==='Enter')sendMessage()">
+                <button class="ai-chat-send" id="chatSendBtn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal-overlay" id="successModal">
+            <div class="modal">
+                <div class="modal-icon"><i class="fas fa-check"></i></div>
+                <h3>Success!</h3>
+                <p id="modalMessage">Your resume has been generated successfully.</p>
+                <button class="btn btn-primary" onclick="closeModal()"
+                    style="margin-top: 15px; padding: 14px 40px;">Continue</button>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loadingText">AI is optimizing your resume...</div>
+        </div>
+
+        <script src="/static/builder.js"></script>
+    </main>
+</body>
+
+</html>

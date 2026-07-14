@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thoufi Resume Builder - Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .intro-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+        }
+
+        /* Animated walking businessman */
+        .walker-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+
+        .businessman {
+            position: absolute;
+            bottom: 50px;
+            left: -100px;
+            animation: walkRight 4s ease-in-out forwards, waveHand 0.5s ease-in-out 4s forwards;
+        }
+
+        @keyframes walkRight {
+            0% { left: -100px; transform: scaleX(1); }
+            100% { left: 50%; transform: translateX(-50%) scaleX(1); }
+        }
+
+        @keyframes waveHand {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(-5deg); }
+            100% { transform: translateX(-50%) rotate(0deg); }
+        }
+
+        /* SVG Businessman */
+        .businessman svg {
+            width: 120px;
+            height: 200px;
+        }
+
+        /* Walking animation for legs */
+        .leg-left {
+            animation: walkLeg 0.6s ease-in-out infinite;
+            transform-origin: top;
+        }
+
+        .leg-right {
+            animation: walkLeg 0.6s ease-in-out infinite 0.3s;
+            transform-origin: top;
+        }
+
+        @keyframes walkLeg {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        /* Arm swing */
+        .arm-left {
+            animation: swingArm 0.6s ease-in-out infinite;
+            transform-origin: top;
+        }
+
+        .arm-right {
+            animation: swingArm 0.6s ease-in-out infinite 0.3s;
+            transform-origin: top;
+        }
+
+        @keyframes swingArm {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-20deg); }
+        }
+
+        /* Ground line */
+        .ground {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+        }
+
+        /* Title animation */
+        .title-container {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 4.5s forwards;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .sub-title {
+            font-size: 1.2rem;
+            color: #888;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enter button */
+        .enter-btn {
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 5.5s forwards;
+            padding: 16px 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0a0a0a;
+            background: #ffffff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .enter-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
+            background: #f0f0f0;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Footer info */
+        .footer-info {
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 6s forwards;
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        .footer-info a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-info a:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.2rem; }
+            .sub-title { font-size: 1rem; }
+            .walker-container { width: 200px; height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="intro-container">
+        <!-- Floating particles -->
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 4s;"></div>
+
+        <div class="walker-container">
+            <div class="businessman" id="businessman">
+                <svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Head -->
+                    <circle cx="60" cy="25" r="18" fill="#e0e0e0"/>
+                    <!-- Hair -->
+                    <path d="M42 20 Q60 5 78 20" stroke="#333" stroke-width="3" fill="none"/>
+                    <!-- Eyes -->
+                    <circle cx="54" cy="24" r="2" fill="#333"/>
+                    <circle cx="66" cy="24" r="2" fill="#333"/>
+                    <!-- Smile -->
+                    <path d="M55 32 Q60 36 65 32" stroke="#333" stroke-width="1.5" fill="none"/>
+                    <!-- Body/Suit -->
+                    <rect x="40" y="43" width="40" height="55" rx="5" fill="#2c3e50"/>
+                    <!-- Tie -->
+                    <polygon points="55,43 65,43 62,70 58,70" fill="#c0392b"/>
+                    <!-- Left Arm -->
+                    <g class="arm-left">
+                        <rect x="25" y="48" width="12" height="45" rx="3" fill="#2c3e50"/>
+                        <circle cx="31" cy="95" r="6" fill="#e0c0a0"/>
+                    </g>
+                    <!-- Right Arm -->
+                    <g class="arm-right">
+                        <rect x="83" y="48" width="12" height="45" rx="3" fill="#2c3e50"/>
+                        <circle cx="89" cy="95" r="6" fill="#e0c0a0"/>
+                    </g>
+                    <!-- Left Leg -->
+                    <g class="leg-left">
+                        <rect x="42" y="95" width="14" height="55" rx="3" fill="#1a1a2e"/>
+                        <rect x="40" y="145" width="18" height="10" rx="2" fill="#000"/>
+                    </g>
+                    <!-- Right Leg -->
+                    <g class="leg-right">
+                        <rect x="64" y="95" width="14" height="55" rx="3" fill="#1a1a2e"/>
+                        <rect x="62" y="145" width="18" height="10" rx="2" fill="#000"/>
+                    </g>
+                    <!-- Briefcase -->
+                    <rect x="95" y="85" width="25" height="20" rx="2" fill="#5d4037"/>
+                    <rect x="100" y="80" width="15" height="5" rx="2" fill="#5d4037"/>
+                </svg>
+            </div>
+            <div class="ground"></div>
+        </div>
+
+        <div class="title-container">
+            <h1 class="main-title">THOUFI</h1>
+            <h2 class="main-title" style="font-size: 1.5rem; font-weight: 400;">RESUME BUILDER</h2>
+            <p class="sub-title">AI-Powered ATS-Optimized Resume Generator</p>
+        </div>
+
+        <a href="/login" class="enter-btn">ENTER PORTAL</a>
+
+        <div class="footer-info">
+            <p>Crafted by <a href="https://instagram.com/thxufii.x5" target="_blank">@thxufii.x5</a></p>
+            <p style="margin-top: 5px;">mohamedthoufiq.dev@gmail.com | +91 99944 39877</p>
+        </div>
+    </div>
+
+    <script>
+        // Stop walking animation after reaching center
+        setTimeout(() => {
+            document.querySelectorAll('.leg-left, .leg-right, .arm-left, .arm-right').forEach(el => {
+                el.style.animation = 'none';
+            });
+
+            // Wave hand animation
+            const rightArm = document.querySelector('.arm-right');
+            rightArm.style.animation = 'waveHandAnim 1s ease-in-out 3';
+            rightArm.style.transformOrigin = 'top';
+        }, 4000);
+
+        // Add wave hand keyframe dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes waveHandAnim {
+                0%, 100% { transform: rotate(0deg); }
+                50% { transform: rotate(-30deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
