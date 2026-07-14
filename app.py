@@ -1,22 +1,23 @@
+import os
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_cors import CORS
-import json
-import os
 from datetime import datetime
-import random
 import re
 
+# Get the directory where this file is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 app = Flask(__name__, 
-            template_folder=os.path.join(os.path.dirname(__file__), '..'),
-            static_folder=os.path.join(os.path.dirname(__file__), '..'),
-            static_url_path='/static')
+            template_folder=BASE_DIR,
+            static_folder=BASE_DIR,
+            static_url_path='')
+
 app.secret_key = 'thoufi_resume_builder_secret_key_2024'
 CORS(app)
 
 # In-memory storage
 users_db = {}
 resumes_db = {}
-chat_history_db = {}
 
 # 15 Resume Templates
 TEMPLATES = [
@@ -37,7 +38,6 @@ TEMPLATES = [
     {"id": "portfolio", "name": "Portfolio Style", "description": "Showcase work with project highlights", "color": "#16a34a", "category": "Creative"}
 ]
 
-# ATS Keywords database
 ATS_KEYWORDS = {
     "Software Engineer": ["python", "javascript", "react", "node.js", "sql", "git", "agile", "rest api", "docker", "aws", "typescript", "mongodb", "ci/cd", "microservices"],
     "Data Scientist": ["python", "machine learning", "deep learning", "tensorflow", "pandas", "numpy", "sql", "statistics", "data visualization", "scikit-learn", "keras", "pytorch", "nlp", "big data"],
@@ -247,5 +247,5 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+# Vercel handler
+app = app
