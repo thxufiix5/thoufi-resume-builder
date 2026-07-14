@@ -1,16 +1,13 @@
 import os
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 import re
 
-# Get the directory where this file is located
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 app = Flask(__name__, 
-            template_folder=BASE_DIR,
-            static_folder=BASE_DIR,
-            static_url_path='')
+            template_folder='templates',
+            static_folder='static',
+            static_url_path='/static')
 
 app.secret_key = 'thoufi_resume_builder_secret_key_2024'
 CORS(app)
