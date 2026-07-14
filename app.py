@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_cors import CORS
 import json
 import os
@@ -6,7 +6,10 @@ from datetime import datetime
 import random
 import re
 
-app = Flask(__name__, template_folder='.', static_folder='.', static_url_path='/static')
+app = Flask(__name__, 
+            template_folder=os.path.join(os.path.dirname(__file__), '..'),
+            static_folder=os.path.join(os.path.dirname(__file__), '..'),
+            static_url_path='/static')
 app.secret_key = 'thoufi_resume_builder_secret_key_2024'
 CORS(app)
 
